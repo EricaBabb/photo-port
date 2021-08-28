@@ -1,31 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { capitalizeFirstLetter } from "../../utils/helpers";
 
+function Nav(props) {
+  const {
+    categories = [],
+    setCurrentCategory,
+    currentCategory,
+  } = props;
 
 
-
-
-function Nav() {
-//Instead of naming each one when we needed it, it is more DRY to define the categories and use .map() function inside the JSX expression
-const categories = [
-    {
-      name: "commercial",
-      description:
-        "Photos of grocery stores, food trucks, and other commercial projects"
-    },
-    { name: "portraits", description: "Portraits of people in my life" },
-    { name: "food", description: "Delicious delicacies" },
-    {
-      name: "landscape",
-      description: "Fields, farmhouses, waterfalls, and the beauty of nature"
-    }
-  ];
-
-   //Now that we've provided a function name ("categorySelected") to onClick(), we need to define it somewhere above the return statement. 
-
-
-
-   const handleClick = (item) => {
+  const handleClick = (item) => {
     console.log(item);
     return item;
   };
@@ -33,7 +17,6 @@ const categories = [
   return (
     <header className="flex-row px-1">
       <h2>
-        {/* Add data-testid for testing query */}
         <a data-testid="link" href="/">
           <span role="img" aria-label="camera"> 📸</span> Oh Snap!
         </a>
@@ -41,8 +24,7 @@ const categories = [
       <nav>
         <ul className="flex-row">
           <li className="mx-2">
-            {/* Add data-testid for testing query */}
-            <a data-testid="about" href="#about" onClick={() => handleClick("About")}>
+            <a data-testid="about" href="#about">
               About me
             </a>
           </li>
@@ -51,15 +33,22 @@ const categories = [
               Contact
             </span>
           </li>
-          {
-            categories.map((category) => (
-              <li className="mx-1" key={category.name} >
-                <span onClick={() => { handleClick(category.name); }}>
-                 {capitalizeFirstLetter(category.name)}
-                </span>
-              </li>
-            ))
-          }
+          {categories.map((category) => (
+            <li
+              className={`mx-1 ${
+                currentCategory.name === category.name
+                }`}
+              key={category.name}
+            >
+              <span
+                onClick={() => {
+                  setCurrentCategory(category);
+                }}
+              >
+                {capitalizeFirstLetter(category.name)}
+              </span>
+            </li>
+          ))}
         </ul>
       </nav>
     </header>
